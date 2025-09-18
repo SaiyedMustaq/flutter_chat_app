@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { Message } from "../model/message.js";
 import { getRoomId } from "../utils/chatHelper.js";
 import { User } from "../model/user.js";
@@ -14,6 +15,7 @@ export const createMessage = async (messageData) => {
       status: messageData.status || "sent",
     });
 
+    await message.save();
     return message;
   } catch (error) {
     throw new Error("Failed to create message");
@@ -37,6 +39,7 @@ export const getMessages = async (
         sender: mongoose.Types.ObjectId(senderId),
         status: "sent",
       };
+
       const undeliveryUpdate = await Message.updateMany(undeliveryQuery, {
         $set: { status: "delivered" },
       });
@@ -46,6 +49,7 @@ export const getMessages = async (
         );
       }
     }
+
     const messages = await Message.aggregater(
       {
         $match: query,
@@ -93,6 +97,7 @@ export const getUndeliverMessage = async (userId, partnertId) => {
       { status: "sent" },
       { new: true }
     ).$sort({ createdAt: 1 });
+
     return message;
   } catch (error) {
     throw new Error("Failed to update message status");
@@ -192,6 +197,7 @@ export const chatRoom = async (userId) => {
         },
       ],
     };
+
     const provateChats = await Message.aggregate([
       {
         $match: provetChatQuery,

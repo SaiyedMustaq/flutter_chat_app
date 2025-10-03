@@ -1,7 +1,7 @@
+import 'package:flutter_socket_app/core/utils/app_constant.dart';
 import 'package:flutter_socket_app/features/auth/model/login_request.dart';
 import 'package:flutter_socket_app/features/auth/model/register_request.dart';
 import 'package:flutter_socket_app/features/auth/repository/auth_repository.dart';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -12,7 +12,7 @@ class AuthController extends GetxController {
   // Observable variables
   var isLoading = false.obs;
   var isLoggedIn = false.obs;
-  var userEmail = ''.obs;
+  var userName = ''.obs;
   String? token;
 
   AuthController(this._authRepository);
@@ -25,26 +25,29 @@ class AuthController extends GetxController {
 
   void checkLoginStatus() {
     isLoggedIn.value = _storage.read('isLoggedIn') ?? false;
-    userEmail.value = _storage.read('userEmail') ?? '';
+    userName.value = _storage.read('userEmail') ?? '';
     token = _storage.read('token');
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(String userName, String password) async {
     isLoading.value = true;
 
     try {
-      final request = LoginRequest(email: email, password: password);
+      final request = LoginRequest(userName: userName, password: password);
       final response = await _authRepository.login(request);
 
       if (response.success && response.data != null) {
         // Save user data
         _storage.write('isLoggedIn', true);
-        _storage.write('userEmail', email);
+        _storage.write('userName', userName);
+        AppConstant.userName = userName;
+        AppConstant.isLogin = isLoggedIn.value;
+        AppConstant.token = response.data!.token;
         _storage.write('token', response.data!.token);
         _storage.write('user', response.data!.user.toJson());
 
         isLoggedIn.value = true;
-        userEmail.value = email;
+        this.userName.value = userName;
         token = response.data!.token;
 
         Get.offAllNamed('/home');
@@ -54,41 +57,33 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Error', 'An error occurred during login');
+      print("ERROR $e");
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> register(String email, String password, String name) async {
+  Future<bool> register(String userName, String password, String name) async {
     isLoading.value = true;
 
     try {
       final request = RegisterRequest(
-        email: email,
+        userName: userName,
         password: password,
         name: name,
       );
       final response = await _authRepository.register(request);
-
-      if (response.success && response.data != null) {
-        // Auto-login after registration
-        await login(email, password);
-      } else {
-        Get.snackbar('Error', response.message);
-      }
+      return response.success;
     } catch (e) {
       Get.snackbar('Error', 'An error occurred during registration');
     } finally {
       isLoading.value = false;
     }
+    return false;
   }
 
   Future<void> logout() async {
     try {
-      await _authRepository.logout();
-    } catch (e) {
-      // Even if API call fails, clear local storage
-    } finally {
       // Clear local storage
       _storage.remove('isLoggedIn');
       _storage.remove('userEmail');
@@ -96,10 +91,16 @@ class AuthController extends GetxController {
       _storage.remove('user');
 
       isLoggedIn.value = false;
-      userEmail.value = '';
+      userName.value = '';
       token = null;
 
       Get.offAllNamed('/login');
-    }
+    } catch (e) {
+      // Even if API call fails, clear local storage
+    } finally {}
+  }
+
+  Future<String?> getUserId() async {
+    return _storage.read("key");
   }
 }

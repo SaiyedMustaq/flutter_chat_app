@@ -2,12 +2,12 @@
 import 'package:flutter_socket_app/features/auth/model/user.dart';
 
 class LoginRequest {
-  final String email;
+  final String userName;
   final String password;
 
-  LoginRequest({required this.email, required this.password});
+  LoginRequest({required this.userName, required this.password});
 
-  Map<String, dynamic> toJson() => {'email': email, 'password': password};
+  Map<String, dynamic> toJson() => {'userName': userName, 'password': password};
 }
 
 // login_response.dart

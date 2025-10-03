@@ -1,5 +1,5 @@
 class AppConstants {
-  static const String baseUrl = 'http://localhost:3000/api/users/';
+  static const String baseUrl = 'http://localhost:3001/api/users/';
   static const int connectTimeout = 30000;
   static const int receiveTimeout = 30000;
 

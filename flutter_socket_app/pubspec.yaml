@@ -37,6 +37,8 @@ dependencies:
   get_storage: ^2.1.1
   dio: ^5.9.0
   get: ^4.7.2
+  chat_plugin: ^1.0.0
+  
 
 dev_dependencies:
   flutter_test:

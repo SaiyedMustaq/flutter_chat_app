@@ -2,7 +2,7 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import userRoutes from "../api/routes/userRoutes.js";
 import chatRoute from "../api/routes/chatRoutes.js";
-
+import "dotenv/config"; // Loads .env variables
 import Server from "socket.io";
 import { createServer } from "http";
 
@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
     currentUserId = userId;
     onlineUser.set(userId, socket.id);
     console.log(`User ${userId} connected with ${socket.id}}`);
-    checkPenidingMessage();
+    checkPenidingMessage(userId);
   });
 
   ///TODO Join Room Event
@@ -270,7 +270,7 @@ io.on("connection", (socket) => {
   });
 });
 
-async function checkPenidingMessage() {
+async function checkPenidingMessage(userId) {
   try {
     const messages = await Message.find({
       receiver: userId,
@@ -285,7 +285,7 @@ async function checkPenidingMessage() {
         messageBySender[message.sender._id].push(message);
       });
 
-      const userSocke = io.socket.sockets.get(onlineUser.get(userId));
+      const userSocke = io.sockets.sockets.get(onlineUser.get(userId));
       if (userSocke) {
         Object.keys(messageBySender).forEach((senderId) => {
           const count = messageBySender[senderId].length;
@@ -303,10 +303,6 @@ async function checkPenidingMessage() {
     console.log(error);
   }
 }
-
-httpServer.listen(process.env.PORT || 4000, () => {
-  app.listen(port, () => {
-    console.log(`Server is running on port ${backEndUrl}:${port} ${version}`);
-    insertFirstUser();
-  });
+httpServer.listen(process.env.PORT || 3000, function () {
+  console.log("Server Starte Mustaq ");
 });

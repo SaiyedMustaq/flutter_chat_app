@@ -123,6 +123,7 @@ class DioClient {
 
   // Handle Dio errors
   dynamic _handleDioError(dio.DioException error) {
+    print("_handleDioError $error");
     if (error.error is AppException) {
       throw error.error as AppException;
     } else if (error.response != null) {

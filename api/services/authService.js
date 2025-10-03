@@ -42,8 +42,10 @@ export const login = async (userName, password) => {
       token: jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
         expiresIn: "1d",
       }),
+      user: user,
     };
   } catch (error) {
     return new Error("Failed to login user");
   }
 };
+

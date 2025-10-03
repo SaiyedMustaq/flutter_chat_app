@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_socket_app/features/auth/controller/auth_controller.dart';
 import 'package:get/get.dart';
 
-
 class RegisterScreen extends StatelessWidget {
   final AuthController _authController = Get.find<AuthController>();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -30,22 +29,13 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               TextFormField(
-                controller: _emailController,
+                controller: _userNameController,
                 decoration: InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.email),
                 ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!GetUtils.isEmail(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
+                keyboardType: TextInputType.text,
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -91,30 +81,30 @@ class RegisterScreen extends StatelessWidget {
                     ? CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: () async {
-                          // if (_formKey.currentState!.validate()) {
-                          //   bool success = await _authController.register(
-                          //     _emailController.text.trim(),
-                          //     _passwordController.text.trim(),
-                          //     _confirmPasswordController.text.trim(),
-                          //   );
+                          if (_formKey.currentState!.validate()) {
+                            bool success = await _authController.register(
+                              _userNameController.text.trim(),
+                              _passwordController.text.trim(),
+                              _confirmPasswordController.text.trim(),
+                            );
 
-                          //   if (success) {
-                          //     Get.offAllNamed('/home');
-                          //     Get.snackbar(
-                          //       'Success',
-                          //       'Registration successful',
-                          //       backgroundColor: Colors.green,
-                          //       colorText: Colors.white,
-                          //     );
-                          //   } else {
-                          //     Get.snackbar(
-                          //       'Error',
-                          //       'Registration failed',
-                          //       backgroundColor: Colors.red,
-                          //       colorText: Colors.white,
-                          //     );
-                          //   }
-                          // }
+                            if (success) {
+                              Get.offAllNamed('/home');
+                              Get.snackbar(
+                                'Success',
+                                'Registration successful',
+                                backgroundColor: Colors.green,
+                                colorText: Colors.white,
+                              );
+                            } else {
+                              Get.snackbar(
+                                'Error',
+                                'Registration failed',
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            }
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(double.infinity, 50),

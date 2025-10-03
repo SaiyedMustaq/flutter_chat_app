@@ -1,5 +1,8 @@
+import 'package:chat_plugin/chat_plugin.dart';
+import 'package:flutter_socket_app/core/network/api_endpoints.dart';
 import 'package:flutter_socket_app/core/network/api_service.dart';
 import 'package:flutter_socket_app/core/network/exceptions.dart';
+import 'package:flutter_socket_app/core/utils/app_constant.dart';
 import 'package:flutter_socket_app/core/utils/base_response.dart';
 import 'package:flutter_socket_app/features/auth/model/login_request.dart';
 import 'package:flutter_socket_app/features/auth/model/register_request.dart';
@@ -44,6 +47,7 @@ class AuthRepository {
         statusCode: response.statusCode!,
       );
     } on AppException catch (e) {
+      print("ERROR $e");
       return BaseResponse(
         success: false,
         message: e.message,
@@ -71,5 +75,34 @@ class AuthRepository {
         statusCode: e.statusCode,
       );
     }
+  }
+
+  Future<void> initilizeChatPlugin(String userId, String token) async {
+    try {
+      if (ChatConfig.instance.userId == userId) {
+        ChatPlugin.chatService.refreshGlobalConnection();
+        return;
+      } else {
+        await ChatPlugin.initialize(
+          config: ChatConfig(
+            apiUrl: AppConstants.baseUrl,
+            userId: userId,
+            token: token,
+            enableTypingIndicators: true,
+            enableOnlineStatus: true,
+            enableReadReceipts: true,
+            autoMarkAsRead: true,
+            maxReconnectionAttempts: 5,
+            debugMode: true,
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> setChatApiHandler(String userId, String token) async {
+    
   }
 }

@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Obx(
           () => Text(
-            'Welcome ${_authController.userEmail.value}',
+            'Welcome ${_authController.userName.value}',
             style: TextStyle(fontSize: 24),
           ),
         ),

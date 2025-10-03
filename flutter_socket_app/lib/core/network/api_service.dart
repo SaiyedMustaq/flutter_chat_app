@@ -20,19 +20,4 @@ class ApiService {
   Future<Response> logout() async {
     return await _dioClient.post(AppConstants.logout);
   }
-
-  Future<Response> getProfile() async {
-    return await _dioClient.get(AppConstants.profile);
-  }
-
-  // User methods
-  Future<Response> getUsers() async {
-    return await _dioClient.get(AppConstants.users);
-  }
-
-  Future<Response> getUserById(String id) async {
-    return await _dioClient.get(AppConstants.userById(id));
-  }
-
-  // Add more API methods as needed
 }

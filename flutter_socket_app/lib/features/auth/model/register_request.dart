@@ -2,18 +2,18 @@
 import 'package:flutter_socket_app/features/auth/model/user.dart';
 
 class RegisterRequest {
-  final String email;
+  final String userName;
   final String password;
   final String name;
 
   RegisterRequest({
-    required this.email,
+    required this.userName,
     required this.password,
     required this.name,
   });
 
   Map<String, dynamic> toJson() => {
-    'email': email,
+    'userName': userName,
     'password': password,
     'name': name,
   };

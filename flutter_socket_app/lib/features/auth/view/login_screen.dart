@@ -4,8 +4,12 @@ import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
   final AuthController _authController = Get.find<AuthController>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController(
+    text: "Tester@123",
+  );
+  final TextEditingController _passwordController = TextEditingController(
+    text: "Tester@123",
+  );
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   LoginScreen({super.key});
@@ -27,22 +31,13 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               TextFormField(
-                controller: _emailController,
+                controller: _userNameController,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'User Name',
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: Icon(Icons.person),
                 ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!GetUtils.isEmail(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
+                keyboardType: TextInputType.text,
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -53,15 +48,6 @@ class LoginScreen extends StatelessWidget {
                   prefixIcon: Icon(Icons.lock),
                 ),
                 obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
-                  }
-                  return null;
-                },
               ),
               SizedBox(height: 30),
               Obx(
@@ -69,29 +55,12 @@ class LoginScreen extends StatelessWidget {
                     ? CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: () async {
-                          // if (_formKey.currentState!.validate()) {
-                          //   bool success = await _authController.login(
-                          //     _emailController.text.trim(),
-                          //     _passwordController.text.trim(),
-                          //   );
-
-                          //   if (success) {
-                          //     Get.offAllNamed('/home');
-                          //     Get.snackbar(
-                          //       'Success',
-                          //       'Login successful',
-                          //       backgroundColor: Colors.green,
-                          //       colorText: Colors.white,
-                          //     );
-                          //   } else {
-                          //     Get.snackbar(
-                          //       'Error',
-                          //       'Invalid credentials',
-                          //       backgroundColor: Colors.red,
-                          //       colorText: Colors.white,
-                          //     );
-                          //   }
-                          // }
+                          if (_formKey.currentState!.validate()) {
+                            await _authController.login(
+                              _userNameController.text.trim(),
+                              _passwordController.text.trim(),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(double.infinity, 50),

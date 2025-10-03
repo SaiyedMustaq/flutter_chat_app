@@ -103,6 +103,23 @@ class AuthRepository {
   }
 
   Future<void> setChatApiHandler(String userId, String token) async {
-    
+    final chatApiHandler = ChatApiHandlers(
+      loadMessagesHandler: ({limit = 20, page = 1, searchText = ""}) async {
+        final receiverId = ChatPlugin.chatService.receiverId;
+        if (receiverId.isEmpty) return [];
+
+        try {
+          var url =
+              "${AppConstants.baseUrl}/app/chat/messages?currentUserId=$userId&receiverId$receiverId&page$page&limit$limit";
+          if (searchText.isNotEmpty) {
+            url += "&searchText=${Uri.encodeComponent(searchText)}";
+          }
+          final response = _apiService.setUpApiHandler(url);
+          print("RESPONSE ");
+        } catch (e) {
+          print(e);
+        }
+      },
+    );
   }
 }

@@ -20,4 +20,8 @@ class ApiService {
   Future<Response> logout() async {
     return await _dioClient.post(AppConstants.logout);
   }
+
+  Future<Response> setUpApiHandler(String url) async {
+    return await _dioClient.get(url);
+  }
 }

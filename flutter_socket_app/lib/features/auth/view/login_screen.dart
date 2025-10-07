@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 class LoginScreen extends StatelessWidget {
   final AuthController _authController = Get.find<AuthController>();
   final TextEditingController _userNameController = TextEditingController(
-    text: "Tester@123",
+    text: "Tester1",
   );
   final TextEditingController _passwordController = TextEditingController(
-    text: "Tester@123",
+    text: "Tester1234",
   );
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

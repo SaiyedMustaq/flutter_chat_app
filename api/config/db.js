@@ -1,12 +1,16 @@
 import mongoose from "mongoose";
-import "dotenv/config";
-
+import dotenv from "dotenv";
+dotenv.config();
 export const connectDB = async () => {
   try {
-    mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(
+      "mongodb+srv://chatapp:chatapp@chatapp.afihdki.mongodb.net/",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        writeConcern: { w: "majority" },
+      }
+    );
     console.log("MongoDB connected");
   } catch (error) {
     console.error("MongoDB connection error:", error);

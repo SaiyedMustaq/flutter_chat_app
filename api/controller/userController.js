@@ -1,4 +1,4 @@
-import { register, login } from "../services/authService.js";
+import { register, login, getAllUser } from "../services/authService.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -25,4 +25,19 @@ export const loginUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
+};
+
+export const getAlluserList = async (req, res) => {
+  
+  try {
+    const result = await getAllUser();
+    if (result instanceof Error) {
+      return res.status(400).json({ message: result.message });
+    }
+    return res.status(200).json({
+      statusCode: 200,
+      data: result,
+      message: "User get",
+    });
+  } catch (error) {}
 };

@@ -49,3 +49,11 @@ export const login = async (userName, password) => {
   }
 };
 
+export const getAllUser = async () => {
+  try {
+    const users = await User.find();
+    return users;
+  } catch (ex) {
+    return [];
+  }
+};

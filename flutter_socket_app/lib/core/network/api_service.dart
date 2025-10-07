@@ -24,4 +24,7 @@ class ApiService {
   Future<Response> setUpApiHandler(String url) async {
     return await _dioClient.get(url);
   }
+  Future<Response> getAlluser(String url) async {
+    return await _dioClient.get(url);
+  }
 }

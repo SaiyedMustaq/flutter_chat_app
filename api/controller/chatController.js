@@ -18,10 +18,16 @@ export const getMessage = async (req, res) => {
 };
 
 export const getChatRoom = async (req, res) => {
+  console.log("getChatRoom");
   try {
     const message = await chatRoom(req.userId);
     return res.status(200).json(message);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    console.log(`Error 1 ==> ${error}`);
+    return res.status(500).json({
+      statusCode: 500,
+      error: error,
+      message: "Somthing Want Wrong",
+    });
   }
 };

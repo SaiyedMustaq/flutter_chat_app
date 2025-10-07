@@ -27,7 +27,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRoutes);
-app.use("/api/user/chat", chatRoute);
+app.use("/api/users/chat", chatRoute);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {

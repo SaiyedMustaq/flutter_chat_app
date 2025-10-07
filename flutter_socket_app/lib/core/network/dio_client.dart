@@ -32,6 +32,7 @@ class DioClient {
         },
         onError: (dio.DioException error, handler) async {
           if (error.response != null) {
+            print("ERROR FOR DIOEXCEPTION $error");
             final statusCode = error.response!.statusCode;
             final message =
                 error.response!.data?['message'] ?? 'An error occurred';
